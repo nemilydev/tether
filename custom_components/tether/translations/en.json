@@ -1,0 +1,333 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect Tether",
+        "description": "Choose a direct local connection or Lovense Standard API pairing.",
+        "data": {
+          "connection_type": "Connection type"
+        }
+      },
+      "local": {
+        "title": "Direct local connection",
+        "description": "Enable **Game Mode** in Lovense Remote and enter the address and port it shows.",
+        "data": {
+          "host": "Lovense Remote IP or hostname",
+          "port": "API port",
+          "use_https": "Use HTTPS",
+          "verify_ssl": "Verify TLS certificates"
+        },
+        "data_description": {
+          "host": "The LAN address of the phone or PC running Lovense Remote, for example 192.168.1.50.",
+          "port": "The HTTP port shown in Game Mode (20010 by default) or the HTTPS port (30010 by default).",
+          "use_https": "Connect to the HTTPS port instead of plain HTTP.",
+          "verify_ssl": "Lovense Remote uses a self-signed certificate on the LAN, so leave this off unless you have replaced it."
+        }
+      },
+      "standard": {
+        "title": "Lovense Standard API",
+        "description": "Set the callback URL in your Lovense developer dashboard to this Home Assistant's `/api/tether/callback` endpoint before pairing.",
+        "data": {
+          "developer_token": "Developer token",
+          "user_id": "User ID",
+          "user_name": "User name",
+          "callback_url": "Configured callback URL"
+        },
+        "data_description": {
+          "developer_token": "The developer token from the Lovense developer dashboard.",
+          "user_id": "Any stable identifier for this Home Assistant user; it pairs callbacks with this entry.",
+          "user_name": "The name Lovense Remote shows for this connection.",
+          "callback_url": "The same callback URL saved in the Lovense developer dashboard. Its path must end in `/api/tether/callback`."
+        }
+      },
+      "pair": {
+        "title": "Pair Lovense Remote",
+        "description": "Scan this QR code with the **Lovense Remote** mobile app. Using Lovense Remote for PC? Enter the code **{pairing_code}** instead.\n\n{qr_code}\n\nAfter scanning, Lovense Remote reports its address to `{callback_url}`. Select **Submit** once the app shows it is connected. The QR code expires after 4 hours.",
+        "data": {
+          "skip_pairing_check": "Continue without waiting for the callback"
+        },
+        "data_description": {
+          "skip_pairing_check": "Only tick this if the callback URL cannot reach Home Assistant. Tether will then rely on the Lovense cloud API until Lovense Remote reaches the callback."
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigure Tether",
+        "data": {
+          "connection_type": "Connection type"
+        }
+      },
+      "reconfigure_local": {
+        "title": "Update local connection",
+        "data": {
+          "host": "Lovense Remote IP or hostname",
+          "port": "API port",
+          "use_https": "Use HTTPS",
+          "verify_ssl": "Verify TLS certificates"
+        },
+        "data_description": {
+          "host": "The LAN address of the phone or PC running Lovense Remote, for example 192.168.1.50.",
+          "port": "The HTTP port shown in Game Mode (20010 by default) or the HTTPS port (30010 by default).",
+          "use_https": "Connect to the HTTPS port instead of plain HTTP.",
+          "verify_ssl": "Lovense Remote uses a self-signed certificate on the LAN, so leave this off unless you have replaced it."
+        }
+      },
+      "reconfigure_standard": {
+        "title": "Update Standard API credentials",
+        "data": {
+          "developer_token": "Developer token",
+          "user_id": "User ID",
+          "user_name": "User name",
+          "callback_url": "Configured callback URL"
+        },
+        "data_description": {
+          "developer_token": "The developer token from the Lovense developer dashboard.",
+          "user_id": "Any stable identifier for this Home Assistant user; it pairs callbacks with this entry.",
+          "user_name": "The name Lovense Remote shows for this connection.",
+          "callback_url": "The same callback URL saved in the Lovense developer dashboard. Its path must end in `/api/tether/callback`."
+        }
+      },
+      "reconfigure_pair": {
+        "title": "Pair Lovense Remote",
+        "description": "Scan this new QR code with the **Lovense Remote** mobile app. Using Lovense Remote for PC? Enter the code **{pairing_code}** instead.\n\n{qr_code}\n\nAfter scanning, Lovense Remote reports its address to `{callback_url}`. Select **Submit** once the app shows it is connected. The QR code expires after 4 hours.",
+        "data": {
+          "skip_pairing_check": "Continue without waiting for the callback"
+        },
+        "data_description": {
+          "skip_pairing_check": "Only tick this if the callback URL cannot reach Home Assistant. Tether will then rely on the Lovense cloud API until Lovense Remote reaches the callback."
+        }
+      }
+    },
+    "error": {
+      "already_configured": "Another Tether entry already uses this connection.",
+      "cannot_connect": "Could not connect to Lovense or the API rejected the request.",
+      "invalid_host": "Enter a valid IP address or hostname without a URL path.",
+      "invalid_callback_url": "Enter a valid HTTP or HTTPS callback URL.",
+      "pairing_not_received": "Home Assistant has not received the pairing callback yet. Scan the QR code, wait a few seconds, then try again. Check that the callback URL in the Lovense developer dashboard matches and is reachable from your phone."
+    },
+    "abort": {
+      "already_configured": "This Lovense connection is already configured.",
+      "reconfigure_successful": "Connection settings updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Tether options",
+        "data": {
+          "poll_interval": "Polling interval (seconds)",
+          "default_time_sec": "Default command duration (seconds)",
+          "verify_ssl": "Verify TLS certificates",
+          "stroke_control_type": "Stroke controls"
+        },
+        "data_description": {
+          "poll_interval": "How often to ask Lovense Remote for the toy list and battery levels.",
+          "default_time_sec": "Duration used by services when no duration is given; 0 runs until stopped.",
+          "verify_ssl": "Verify TLS certificates for HTTPS requests to Lovense Remote.",
+          "stroke_control_type": "How stroking toys are exposed: as a dimmable light (voice friendly), as a precise number, or both."
+        }
+      }
+    }
+  },
+  "selector": {
+    "connection_type": {
+      "options": {
+        "local": "Direct local connection (Game Mode)",
+        "standard": "Lovense Standard API (QR pairing)"
+      }
+    },
+    "stroke_control_type": {
+      "options": {
+        "lights": "Light",
+        "numbers": "Number",
+        "both": "Light and number"
+      }
+    },
+    "preset": {
+      "options": {
+        "pulse": "Pulse",
+        "wave": "Wave",
+        "fireworks": "Fireworks",
+        "earthquake": "Earthquake"
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "stop": {
+        "name": "Stop"
+      }
+    },
+    "light": {
+      "vibration": {
+        "name": "Vibration",
+        "state_attributes": {
+          "effect": {
+            "state": {
+              "pulse": "Pulse",
+              "wave": "Wave",
+              "fireworks": "Fireworks",
+              "earthquake": "Earthquake"
+            }
+          }
+        }
+      },
+      "pump": {
+        "name": "Pump"
+      },
+      "stroke": {
+        "name": "Stroke"
+      }
+    },
+    "number": {
+      "vibrate": {
+        "name": "Vibrate"
+      },
+      "vibrate1": {
+        "name": "Vibrate 1"
+      },
+      "vibrate2": {
+        "name": "Vibrate 2"
+      },
+      "vibrate3": {
+        "name": "Vibrate 3"
+      },
+      "rotate": {
+        "name": "Rotate"
+      },
+      "pump": {
+        "name": "Pump level"
+      },
+      "thrusting": {
+        "name": "Thrusting"
+      },
+      "fingering": {
+        "name": "Fingering"
+      },
+      "suction": {
+        "name": "Suction"
+      },
+      "depth": {
+        "name": "Depth"
+      },
+      "oscillate": {
+        "name": "Oscillate"
+      },
+      "stroke": {
+        "name": "Stroke range"
+      },
+      "position": {
+        "name": "Position"
+      }
+    },
+    "select": {
+      "preset": {
+        "name": "Preset",
+        "state": {
+          "pulse": "Pulse",
+          "wave": "Wave",
+          "fireworks": "Fireworks",
+          "earthquake": "Earthquake"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "no_toy_targets": {
+      "message": "Select at least one entity or device of a loaded Tether toy."
+    }
+  },
+  "services": {
+    "play_pattern": {
+      "name": "Play pattern",
+      "description": "Plays a custom sequence of vibration strengths on the targeted toys.",
+      "fields": {
+        "pattern": {
+          "name": "Strength steps",
+          "description": "Semicolon-separated strengths from 0 to 20, at most 50 steps."
+        },
+        "interval": {
+          "name": "Step interval",
+          "description": "How long each step lasts, in milliseconds."
+        },
+        "time_sec": {
+          "name": "Duration",
+          "description": "Total run time in seconds; 0 runs until stopped. Defaults to the configured default duration."
+        },
+        "loop_running_sec": {
+          "name": "Loop running time",
+          "description": "Seconds to run before each pause; 0 disables looping."
+        },
+        "loop_pause_sec": {
+          "name": "Loop pause time",
+          "description": "Seconds to pause between loop runs."
+        }
+      }
+    },
+    "play_preset": {
+      "name": "Play preset",
+      "description": "Runs a built-in Lovense preset on the targeted toys.",
+      "fields": {
+        "name": {
+          "name": "Preset",
+          "description": "The built-in Lovense pattern to play."
+        },
+        "time_sec": {
+          "name": "Duration",
+          "description": "Total run time in seconds; 0 runs until stopped. Defaults to the configured default duration."
+        }
+      }
+    },
+    "send_function": {
+      "name": "Send function",
+      "description": "Sends one or more validated Lovense function actions to the targeted toys.",
+      "fields": {
+        "action": {
+          "name": "Action",
+          "description": "Comma-separated Function:level pairs, for example Vibrate:10,Rotate:5, or Stop."
+        },
+        "time_sec": {
+          "name": "Duration",
+          "description": "Total run time in seconds; 0 runs until stopped. Defaults to the configured default duration."
+        },
+        "loop_running_sec": {
+          "name": "Loop running time",
+          "description": "Seconds to run before each pause; 0 disables looping."
+        },
+        "loop_pause_sec": {
+          "name": "Loop pause time",
+          "description": "Seconds to pause between loop runs."
+        },
+        "stop_previous": {
+          "name": "Stop previous commands",
+          "description": "Stop any running command before starting this one."
+        }
+      }
+    },
+    "stop_all": {
+      "name": "Stop all",
+      "description": "Immediately stops every function on the targeted toys."
+    },
+    "ramp": {
+      "name": "Ramp",
+      "description": "Climbs to a peak vibration level, holds it, then decays back to off.",
+      "fields": {
+        "peak": {
+          "name": "Peak intensity",
+          "description": "Highest vibration level reached, from 1 to 20."
+        },
+        "climb": {
+          "name": "Climb",
+          "description": "Seconds taken to reach the peak."
+        },
+        "hold": {
+          "name": "Hold",
+          "description": "Seconds to stay at the peak."
+        },
+        "decay": {
+          "name": "Decay",
+          "description": "Seconds taken to return to off."
+        }
+      }
+    }
+  }
+}

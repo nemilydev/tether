@@ -1,0 +1,144 @@
+play_pattern:
+  target:
+    entity:
+      integration: tether
+  fields:
+    pattern:
+      required: true
+      example: "4;8;12;16;20;12;4"
+      selector:
+        text:
+    interval:
+      default: 1000
+      selector:
+        number:
+          min: 100
+          max: 5000
+          step: 100
+          unit_of_measurement: ms
+    time_sec:
+      selector:
+        number:
+          min: 0
+          max: 3600
+          step: 1
+          unit_of_measurement: s
+    loop_running_sec:
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 3600
+          step: 1
+          unit_of_measurement: s
+    loop_pause_sec:
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 3600
+          step: 1
+          unit_of_measurement: s
+
+play_preset:
+  target:
+    entity:
+      integration: tether
+  fields:
+    name:
+      required: true
+      selector:
+        select:
+          translation_key: preset
+          options:
+            - pulse
+            - wave
+            - fireworks
+            - earthquake
+    time_sec:
+      selector:
+        number:
+          min: 0
+          max: 3600
+          step: 1
+          unit_of_measurement: s
+
+send_function:
+  target:
+    entity:
+      integration: tether
+  fields:
+    action:
+      required: true
+      example: "Vibrate:10,Rotate:5"
+      selector:
+        text:
+    time_sec:
+      selector:
+        number:
+          min: 0
+          max: 3600
+          step: 1
+          unit_of_measurement: s
+    loop_running_sec:
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 3600
+          step: 1
+          unit_of_measurement: s
+    loop_pause_sec:
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 3600
+          step: 1
+          unit_of_measurement: s
+    stop_previous:
+      default: false
+      selector:
+        boolean:
+
+stop_all:
+  target:
+    entity:
+      integration: tether
+
+ramp:
+  target:
+    entity:
+      integration: tether
+  fields:
+    peak:
+      default: 20
+      selector:
+        number:
+          min: 1
+          max: 20
+          step: 1
+    climb:
+      default: 30
+      selector:
+        number:
+          min: 0
+          max: 300
+          step: 1
+          unit_of_measurement: s
+    hold:
+      default: 30
+      selector:
+        number:
+          min: 0
+          max: 300
+          step: 1
+          unit_of_measurement: s
+    decay:
+      default: 30
+      selector:
+        number:
+          min: 0
+          max: 300
+          step: 1
+          unit_of_measurement: s

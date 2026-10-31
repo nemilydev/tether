@@ -1,0 +1,13 @@
+{
+  "domain": "tether",
+  "name": "Tether",
+  "codeowners": ["@nemilydev"],
+  "config_flow": true,
+  "dependencies": ["http"],
+  "documentation": "https://github.com/nemilydev/tether",
+  "integration_type": "hub",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/nemilydev/tether/issues",
+  "requirements": [],
+  "version": "1.0.2"
+}
