@@ -5,6 +5,7 @@ from collections.abc import Callable, Mapping
 from typing import Any
 
 from homeassistant.core import callback
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -79,9 +80,23 @@ class TetherEntity(CoordinatorEntity[LovenseCoordinator]):
             translation_key = key
         if translation_key is not None:
             self._attr_translation_key = translation_key
+
+        device_registry = dr.async_get(coordinator.hass)
+        parent_device = device_registry.async_get_device_by_identifier(
+        (DOMAIN, entry_id), entry_id
+)
+        if parent_device is None:
+            parent_device = device_registry.async_get_or_create(
+                config_entry_id=entry_id,
+                identifiers={(DOMAIN, entry_id)},
+                manufacturer="Lovense",
+                model="Lovense Remote",
+                name=coordinator.config_entry.title,
+            )
+
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, toy_device_identifier(entry_id, toy_id))},
-            via_device=(DOMAIN, entry_id),
+            via_device_id=parent_device.id,
             name=format_device_name(toy_info),
             manufacturer="Lovense",
             model=str(toy_info.get("name") or "Unknown"),
